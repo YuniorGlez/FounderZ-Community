@@ -1,3 +1,5 @@
+import './styles.css';
+
 const mockData = [
     { name: 'Persona 1', role: 'Diseñador', thumbnail: 'https://via.placeholder.com/150', linkedin: '#' },
     { name: 'Persona 2', role: 'Gerente de Proyecto', thumbnail: 'https://via.placeholder.com/150', linkedin: '#' },
