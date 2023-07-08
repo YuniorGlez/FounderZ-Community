@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,22 @@
     <title>Comunidad FounderZ</title>
     <link href="styles.css" rel="stylesheet">
 </head>
+
 <body>
     <header class="p-6 bg-blue-500 text-white">
         <h1 class="text-4xl">Comunidad FounderZ</h1>
         <p class="text-lg">Descubre a los increíbles miembros de nuestra comunidad</p>
     </header>
     <main class="p-6">
+        <div class="flex items-center justify-between mt-4">
+            <div>
+                <input type="checkbox" id="linkedin" class="form-checkbox h-5 w-5 text-blue-600">
+                <label for="linkedin" class="ml-2 text-gray-700">Mostrar solo usuarios con LinkedIn</label>
+            </div>
+            <div class="text-gray-700">
+                <span id="displayedCount">0</span> / <span id="totalCount">0</span> usuarios
+            </div>
+        </div>
         <input type="text" id="search" class="p-2 w-full mb-6" placeholder="Buscar...">
         <div id="loader" class="loader"></div>
         <div id="categories" class="mb-6">
@@ -28,4 +39,5 @@
     </main>
     <script type="module" src="main.js"></script>
 </body>
+
 </html>
