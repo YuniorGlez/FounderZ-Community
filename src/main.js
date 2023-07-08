@@ -39,15 +39,36 @@ searchInput.addEventListener('input', function () {
 
 function createPersonCard(person) {
     const div = document.createElement('div');
-    div.className = 'p-4 border rounded shadow';
+    div.className = 'p-4 border rounded shadow relative'; // Add 'relative' to position the modal
     div.innerHTML = `
         <img src="${person.avatar}" alt="${person.name}" class="w-full h-32 object-cover mb-2 rounded">
         <h2 class="text-xl mb-2">${person.name}</h2>
         <p class="mb-2">${person.role}</p>
         `;
     div.innerHTML += person.linkedin ? `<a href="${person.linkedin}" target="_blank" rel="noopener noreferrer" class="text-blue-500">Ver LinkedIn</a>` : "";
+    
+    // Create a modal for the person's first message
+    const modal = document.createElement('div');
+    modal.className = 'modal hidden absolute bottom-250 left-1/2 transform -translate-x-1/2 mt-2 p-2 bg-blue-100 rounded shadow-lg z-10 w-80'; // Adjust styles here
+    modal.innerHTML = `
+        <h2 class="text-sm mb-1">${person.name}'s first message</h2>
+        <p class="text-xs">${person.messages[0]}</p>
+    `;
+    div.appendChild(modal);
+
+    // Show the modal when the person card is moused over
+    div.addEventListener('mouseover', function () {
+        modal.classList.remove('hidden');
+    });
+
+    // Hide the modal when the mouse leaves the person card
+    div.addEventListener('mouseout', function () {
+        modal.classList.add('hidden');
+    });
+
     return div;
 }
+
 
 function createCategoryButton(category) {
     const button = document.createElement('button');
