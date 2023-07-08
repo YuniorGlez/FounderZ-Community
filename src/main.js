@@ -91,12 +91,23 @@ function fetchPeople() {
 }
 searchInput.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
-    const filteredPeople = people.filter(person =>
-        person.name.toLowerCase().includes(searchTerm) ||
-        person.role.toLowerCase().includes(searchTerm)
-    );
-    displayPeople(filteredPeople);
+    fetch(`https://api.community-founderz.com/users?name_like=${searchTerm}&_page=${currentPage}&_limit=${pageSize}`)
+        .then(async response => {
+            const totalCount = response.headers.get('X-Total-Count');
+            return {
+                totalCount,
+                data: await response.json()
+            }
+        })
+        .then(res => {
+            people = res.data;
+            displayPeople(people);
+            displayPagination(Math.round(res.totalCount / pageSize));
+            document.getElementById('totalCount').textContent = res.totalCount;
+        })
+        .catch(error => console.error('Error:', error));
 });
+
 
 linkedinCheckbox.addEventListener('change', function () {
     const linkedinFilter = this.checked;
