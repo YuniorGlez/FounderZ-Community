@@ -70,16 +70,22 @@ function displayPagination(totalPages) {
 function fetchPeople() {
     loader.style.display = 'block';
     fetch(`https://api.community-founderz.com/users?_page=${currentPage}&_limit=${pageSize}`)
-        .then(response => response.json())
-        .then(data => {
-            people = data;
+        .then(async response => {
+            const totalCount = response.headers.get('X-Total-Count');
+            return {
+                totalCount,
+                data: await response.json()
+            }
+        })
+        .then(res => {
+            people = res.data;
             const categories = [...new Set(people.map(person => person.role))];
             displayPeople(people);
             displayCategories(categories);
-            displayPagination(20);
+            displayPagination(Math.round(res.totalCount / pageSize));
             loader.style.display = 'none';
             localStorage.setItem('people', JSON.stringify(people));
-            document.getElementById('totalCount').textContent = data.totalCount;
+            document.getElementById('totalCount').textContent = res.totalCount;
         })
         .catch(error => console.error('Error:', error));
 }
