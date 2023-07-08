@@ -1,7 +1,15 @@
+import { createHtmlPlugin } from 'vite-plugin-html';
+import compression from 'vite-plugin-compression';
+
 export default {
-    root: 'src',
-    build: {
-      outDir: '../public',
-    },
-  };
-  
+  plugins: [
+    compression(),
+    createHtmlPlugin({
+      minify: true
+    }),
+  ],
+  root: 'src',
+  build: {
+    outDir: '../public',
+  },
+};
