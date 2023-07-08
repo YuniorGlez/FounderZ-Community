@@ -10,6 +10,33 @@ const loader = document.getElementById('loader');
 const linkedinCheckbox = document.getElementById('linkedin');
 const paginationContainer = document.getElementById('pagination');
 
+let currentFilters = {
+    linkedin: false,
+    search: '',
+    page: 1
+};
+
+linkedinCheckbox.addEventListener('change', function () {
+    currentFilters.linkedin = this.checked;
+    updateURL();
+    fetchPeople();
+});
+
+function updateURL() {
+    const params = new URLSearchParams();
+    params.set('linkedin', currentFilters.linkedin);
+    params.set('search', currentFilters.search);
+    params.set('page', currentFilters.page);
+    window.history.replaceState({}, '', '?' + params.toString());
+}
+
+searchInput.addEventListener('input', function () {
+    currentFilters.search = this.value.toLowerCase();
+    updateURL();
+    fetchPeople();
+});
+
+
 function createPersonCard(person) {
     const div = document.createElement('div');
     div.className = 'p-4 border rounded shadow';
@@ -58,7 +85,8 @@ function displayPagination(totalPages) {
         button.className = 'p-2 m-1 bg-blue-500 text-white rounded';
         button.textContent = i;
         button.addEventListener('click', function () {
-            currentPage = i;
+            currentFilters.page = i;
+            updateURL();
             fetchPeople();
         });
         paginationContainer.appendChild(button);
@@ -66,10 +94,13 @@ function displayPagination(totalPages) {
 }
 
 
+// Fetch data from an API// Fetch data from an API
 // Fetch data from an API
 function fetchPeople() {
     loader.style.display = 'block';
-    fetch(`https://api.community-founderz.com/users?_page=${currentPage}&_limit=${pageSize}`)
+    const linkedinFilter = currentFilters.linkedin ? 'linkedin_ne=&' : '';
+    const searchFilter = currentFilters.search ? `name_like=${currentFilters.search}&` : '';
+    fetch(`https://api.community-founderz.com/users?${linkedinFilter}${searchFilter}_page=${currentFilters.page}&_limit=${pageSize}`)
         .then(async response => {
             const totalCount = response.headers.get('X-Total-Count');
             return {
@@ -83,37 +114,15 @@ function fetchPeople() {
             displayPeople(people);
             displayCategories(categories);
             displayPagination(Math.round(res.totalCount / pageSize));
-            loader.style.display = 'none';
-            localStorage.setItem('people', JSON.stringify(people));
+            loader.style.display = 'none'; // Hide the loader
+            localStorage.setItem('people', JSON.stringify(people)); // Save the data in localStorage
             document.getElementById('totalCount').textContent = res.totalCount;
         })
         .catch(error => console.error('Error:', error));
 }
-searchInput.addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-    fetch(`https://api.community-founderz.com/users?name_like=${searchTerm}&_page=${currentPage}&_limit=${pageSize}`)
-        .then(async response => {
-            const totalCount = response.headers.get('X-Total-Count');
-            return {
-                totalCount,
-                data: await response.json()
-            }
-        })
-        .then(res => {
-            people = res.data;
-            displayPeople(people);
-            displayPagination(Math.round(res.totalCount / pageSize));
-            document.getElementById('totalCount').textContent = res.totalCount;
-        })
-        .catch(error => console.error('Error:', error));
-});
 
 
-linkedinCheckbox.addEventListener('change', function () {
-    const linkedinFilter = this.checked;
-    const filteredPeople = people.filter(person => linkedinFilter ? person.linkedin : true);
-    displayPeople(filteredPeople);
-});
+
 
 // Load the data from localStorage if available
 const savedPeople = localStorage.getItem('people');
@@ -127,3 +136,21 @@ if (savedPeople) {
 } else {
     fetchPeople();
 }
+
+
+// On page load, check URL for filters
+window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('linkedin')) {
+        currentFilters.linkedin = params.get('linkedin') === 'true';
+        linkedinCheckbox.checked = currentFilters.linkedin;
+    }
+    if (params.has('search')) {
+        currentFilters.search = params.get('search');
+        searchInput.value = currentFilters.search;
+    }
+    if (params.has('page')) {
+        currentPage = Number(params.get('page'));
+    }
+    fetchPeople();
+});
