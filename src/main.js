@@ -11,7 +11,7 @@ function createPersonCard(person) {
     const div = document.createElement('div');
     div.className = 'p-4 border rounded shadow';
     div.innerHTML = `
-        <img src="${person.thumbnail}" alt="${person.name}" class="w-full h-32 object-cover mb-2 rounded">
+        <img src="${person.avatar}" alt="${person.name}" class="w-full h-32 object-cover mb-2 rounded">
         <h2 class="text-xl mb-2">${person.name}</h2>
         <p class="mb-2">${person.role}</p>
         `;
