@@ -59,6 +59,8 @@ setTimeout(() => {
     const categories = [...new Set(people.map(person => person.role))];
     displayPeople(people);
     displayCategories(categories);
+    loader.style.display = 'none'; // Oculta el loader
+    localStorage.setItem('people', JSON.stringify(people)); // Guarda los datos en localStorage
 }, 1000);
 
 searchInput.addEventListener('input', function() {
@@ -69,3 +71,13 @@ searchInput.addEventListener('input', function() {
     );
     displayPeople(filteredPeople);
 });
+
+// Carga los datos desde localStorage si están disponibles
+const savedPeople = localStorage.getItem('people');
+if (savedPeople) {
+    people = JSON.parse(savedPeople);
+    const categories = [...new Set(people.map(person => person.role))];
+    displayPeople(people);
+    displayCategories(categories);
+    loader.style.display = 'none'; // Oculta el loader
+}
