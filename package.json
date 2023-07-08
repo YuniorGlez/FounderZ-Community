@@ -1,0 +1,32 @@
+{
+  "name": "founderz-community",
+  "version": "1.0.0",
+  "description": "Unofficial website about the people on Discord's Master AI of FounderZ ",
+  "main": "public/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss build src/styles.css -o public/output.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YuniorGlez/FounderZ-Community.git"
+  },
+  "keywords": [
+    "website",
+    "IA",
+    "listing",
+    "community",
+    "tailwindcss"
+  ],
+  "author": "YuniorGlez (SQUAADS.COM)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YuniorGlez/FounderZ-Community/issues"
+  },
+  "homepage": "https://github.com/YuniorGlez/FounderZ-Community#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.25",
+    "tailwindcss": "^3.3.2"
+  }
+}
