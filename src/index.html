@@ -24,7 +24,12 @@
                 <input type="checkbox" id="linkedin" class="form-checkbox h-5 w-5 text-blue-600">
                 <label for="linkedin" class="ml-2 text-gray-700">Mostrar solo usuarios con LinkedIn</label>
             </div>
-            <div class="text-gray-700">
+
+            <div id="pagination" class="flex items-center justify-between mt-4">
+                <!-- La paginación se insertará aquí -->
+            </div>
+    
+            <div class="text-gray-700 hidden">
                 <span id="displayedCount">0</span> / <span id="totalCount">0</span> usuarios
             </div>
         </div>
@@ -36,6 +41,7 @@
         <div id="people" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <!-- Las personas se insertarán aquí -->
         </div>
+
     </main>
     <script type="module" src="main.js"></script>
 </body>

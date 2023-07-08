@@ -1,11 +1,14 @@
 import './styles.css';
 
 let people = [];
+let currentPage = 1;
+const pageSize = 25;
 const peopleContainer = document.getElementById('people');
 const categoriesContainer = document.getElementById('categories');
 const searchInput = document.getElementById('search');
 const loader = document.getElementById('loader');
 const linkedinCheckbox = document.getElementById('linkedin');
+const paginationContainer = document.getElementById('pagination');
 
 function createPersonCard(person) {
     const div = document.createElement('div');
@@ -46,20 +49,40 @@ function displayCategories(categories) {
     }
 }
 
-// Fetch data from an API
-fetch('https://api.community-founderz.com/users')
-    .then(response => response.json())
-    .then(data => {
-        people = data;
-        const categories = [...new Set(people.map(person => person.role))];
-        displayPeople(people);
-        displayCategories(categories);
-        loader.style.display = 'none'; // Hide the loader
-        localStorage.setItem('people', JSON.stringify(people)); // Save the data in localStorage
-        document.getElementById('totalCount').textContent = people.length;
-    })
-    .catch(error => console.error('Error:', error));
 
+
+function displayPagination(totalPages) {
+    paginationContainer.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.className = 'p-2 m-1 bg-blue-500 text-white rounded';
+        button.textContent = i;
+        button.addEventListener('click', function () {
+            currentPage = i;
+            fetchPeople();
+        });
+        paginationContainer.appendChild(button);
+    }
+}
+
+
+// Fetch data from an API
+function fetchPeople() {
+    loader.style.display = 'block';
+    fetch(`https://api.community-founderz.com/users?_page=${currentPage}&_limit=${pageSize}`)
+        .then(response => response.json())
+        .then(data => {
+            people = data;
+            const categories = [...new Set(people.map(person => person.role))];
+            displayPeople(people);
+            displayCategories(categories);
+            displayPagination(20);
+            loader.style.display = 'none';
+            localStorage.setItem('people', JSON.stringify(people));
+            document.getElementById('totalCount').textContent = data.totalCount;
+        })
+        .catch(error => console.error('Error:', error));
+}
 searchInput.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
     const filteredPeople = people.filter(person =>
@@ -82,5 +105,8 @@ if (savedPeople) {
     const categories = [...new Set(people.map(person => person.role))];
     displayPeople(people);
     displayCategories(categories);
-    loader.style.display = 'none'; // Hide the loader
+    loader.style.display = 'none';
+    fetchPeople();
+} else {
+    fetchPeople();
 }
