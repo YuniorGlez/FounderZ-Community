@@ -47,7 +47,7 @@ function displayCategories(categories) {
 }
 
 // Fetch data from an API
-fetch('https://20.62.172.254:3000/users')
+fetch('https://api.community-founderz.com/users')
     .then(response => response.json())
     .then(data => {
         people = data;
