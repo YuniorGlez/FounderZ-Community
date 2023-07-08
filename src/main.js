@@ -82,7 +82,10 @@ function displayPagination(totalPages) {
     paginationContainer.innerHTML = '';
     for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement('button');
-        button.className = 'p-2 m-1 bg-blue-500 text-white rounded';
+        button.className = 'p-2 m-1 text-blue-500 rounded';
+        if (i === currentFilters.page) {
+            button.classList.add('bg-blue-500', 'text-white'); // Add a different color for the current page
+        }
         button.textContent = i;
         button.addEventListener('click', function () {
             currentFilters.page = i;
@@ -92,6 +95,7 @@ function displayPagination(totalPages) {
         paginationContainer.appendChild(button);
     }
 }
+
 
 
 // Fetch data from an API// Fetch data from an API
