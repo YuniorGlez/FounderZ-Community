@@ -19,6 +19,9 @@
         <p class="text-lg">Descubre a los increíbles miembros de nuestra comunidad</p>
     </header>
     <main class="p-6">
+        
+        <button id="clearFilters" class="p-2 m-1 bg-red-500 text-white rounded">Limpiar filtros</button>
+
         <div class="flex items-center justify-between mt-4">
             <div>
                 <input type="checkbox" id="linkedin" class="form-checkbox h-5 w-5 text-blue-600">
@@ -35,8 +38,8 @@
         </div>
         <input type="text" id="search" class="p-2 w-full mb-6" placeholder="Buscar...">
         <div id="loader" class="loader"></div>
-        <div id="categories" class="mb-6">
-            <!-- Las categorías se insertarán aquí -->
+        <div id="roles" class="mb-6">
+            <!-- Las roles se insertarán aquí -->
         </div>
         <div id="people" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <!-- Las personas se insertarán aquí -->
