@@ -58,7 +58,7 @@ function createPersonCard(person) {
     const div = document.createElement('div');
     div.className = 'p-4 border rounded shadow relative';
     div.innerHTML = `
-        <img src="${person.avatar}" alt="${person.name}" class="w-full h-32 object-cover mb-2 rounded">
+        <img height="150" width="300" src="${person.avatar}" alt="${person.name}" class="w-full h-32 object-cover mb-2 rounded">
         <h2 class="text-xl mb-2">${person.name}</h2>
         <p class="mb-2">${person.role}</p>
         `;
@@ -150,7 +150,12 @@ function fetchPeople() {
             }
         })
         .then(res => {
-            people = res.data;
+            people = res.data.map(person => {
+                if (person.avatar.endsWith('png?size=512')) {
+                    person.avatar = person.avatar.replace('png?size=512', 'webp?size=128');
+                }
+                return person;
+            });
             displayPeople(people);
             displayPagination(Math.round(res.totalCount / pageSize));
             loader.style.display = 'none';
